@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type ErrorCategory =
   | 'VALIDATION'
   | 'AUTHENTICATION'
@@ -60,4 +61,32 @@ export interface MongoError {
 
 export interface JWTError extends Error {
   name: string;
+}
+
+export interface MongoCastError {
+  path: string;
+  value: any;
+  kind?: string;
+  valueType?: string;
+  reason?: any;
+}
+
+export interface MongoValidationError {
+  errors: {
+    [key: string]: {
+      path: string;
+      message: string;
+      value: unknown;
+    };
+  };
+}
+
+export interface ValidationErrorDetail {
+  field: string;
+  message: string;
+  value: unknown;
+}
+
+export interface CustomValidationError extends Error {
+  details: ValidationErrorDetail[];
 }
