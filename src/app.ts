@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import envConfig from './app/config';
+import globalErrorHandler from './app/middleware/globalErrorHandler';
 
 const app: Application = express();
 
@@ -43,5 +44,6 @@ app.get('/health', (_req: Request, res: Response) => {
 // API Routes
 
 //  Error Handling Middleware
+app.use(globalErrorHandler);
 
 export default app;

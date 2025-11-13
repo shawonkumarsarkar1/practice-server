@@ -49,3 +49,15 @@ export interface AppErrorParams {
   isOperational?: boolean | undefined;
   code?: string | undefined;
 }
+
+export interface MongoError {
+  code?: number;
+  name?: string;
+  model?: {
+    modelName?: string;
+  };
+}
+
+export interface JWTError extends Error {
+  name: string;
+}
