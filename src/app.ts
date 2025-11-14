@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import envConfig from './app/config';
+import { appRoute } from './app/routes';
 import globalErrorHandler from './app/middleware/globalErrorHandler';
 import notFound from './app/middleware/notFound';
 
@@ -43,6 +44,7 @@ app.get('/health', (_req: Request, res: Response) => {
 });
 
 // API Routes
+app.use('/api/v1/practice-server', appRoute);
 
 //  Error Handling Middleware
 app.use(notFound);
