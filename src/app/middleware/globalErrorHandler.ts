@@ -16,7 +16,11 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     (error.code === 11000 ||
       (error.name === 'MongoError' && error.code === 11000))
   ) {
-    const mongoError = formatMongoDuplicateKeyError(error);
+    const mongoError = formatMongoDuplicateKeyError({
+      ...error,
+      name: error.name ?? 'MongoError',
+      message: String(error.message ?? 'Duplicate key error'),
+    });
     const unknownAppError = appError.fromUnknown(mongoError, {
       path: req.path,
       method: req.method,
@@ -27,7 +31,14 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
 
   // Handle MongoDB CastError (invalid ObjectId)
   if (isMongoError(error) && error?.name === 'CastError') {
-    const castError = formatMongoCastError(error);
+    const mongoError = error as { path?: string; value?: string };
+    const castError = formatMongoCastError({
+      ...error,
+      name: error.name ?? 'CastError',
+      message: String(error.message ?? 'Cast error'),
+      path: mongoError.path ?? 'unknown',
+      value: mongoError.value ?? null,
+    });
     const unknownAppError = appError.fromUnknown(castError, {
       path: req.path,
       method: req.method,
@@ -39,7 +50,17 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
 
   // Handle MongoDB ValidationError
   if (isMongoError(error) && error?.name === 'ValidationError') {
-    const validationError = formatMongoValidationError(error);
+    const mongoValidationError = {
+      errors:
+        (
+          error as {
+            errors?: {
+              [key: string]: { path: string; message: string; value: unknown };
+            };
+          }
+        ).errors ?? {},
+    };
+    const validationError = formatMongoValidationError(mongoValidationError);
     const unknownAppError = appError.fromUnknown(validationError, {
       path: req.path,
       method: req.method,

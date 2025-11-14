@@ -54,6 +54,7 @@ export interface AppErrorParams {
 export interface MongoError {
   code?: number;
   name?: string;
+  message?: string;
   model?: {
     modelName?: string;
   };
@@ -64,7 +65,9 @@ export interface JWTError extends Error {
 }
 
 export interface MongoCastError {
+  name: string;
   path: string;
+  message: string;
   value: any;
   kind?: string;
   valueType?: string;

@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import envConfig from './app/config';
 import globalErrorHandler from './app/middleware/globalErrorHandler';
+import notFound from './app/middleware/notFound';
 
 const app: Application = express();
 
@@ -44,6 +45,7 @@ app.get('/health', (_req: Request, res: Response) => {
 // API Routes
 
 //  Error Handling Middleware
+app.use(notFound);
 app.use(globalErrorHandler);
 
 export default app;

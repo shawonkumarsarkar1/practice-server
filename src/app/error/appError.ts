@@ -18,6 +18,9 @@ export class appError extends Error {
   // Severity level (LOW, MEDIUM, HIGH, CRITICAL) for error impact assessment
   public readonly severity: ErrorSeverity;
 
+  // Status of the error
+  public readonly status: string;
+
   // HTTP status code to be returned in API responses
   public readonly statusCode: HttpStatusCode;
 
@@ -58,7 +61,7 @@ export class appError extends Error {
     Object.setPrototypeOf(this, new.target.prototype);
 
     // Initialize error properties
-    this.name = 'AppError';
+    this.status = 'False';
     this.category = category;
     this.severity = severity;
     this.statusCode = statusCode;
@@ -89,7 +92,7 @@ export class appError extends Error {
    */
   public toJSON(): Record<string, unknown> {
     return {
-      name: this.name,
+      status: this.status,
       message: this.message,
       category: this.category,
       severity: this.severity,
@@ -102,7 +105,6 @@ export class appError extends Error {
       // Include original error details if available
       ...(this.originalError && {
         originalError: {
-          name: this.originalError.name,
           message: this.originalError.message,
           stack: this.originalError.stack,
         },
@@ -119,7 +121,7 @@ export class appError extends Error {
   public toResponse(): Record<string, unknown> {
     const response: Record<string, unknown> = {
       error: {
-        name: this.name,
+        status: this.status,
         message: this.message,
         category: this.category,
         code: this.code,
