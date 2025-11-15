@@ -12,9 +12,6 @@ export type ErrorCategory =
   | 'NETWORK'
   | 'UNKNOWN';
 
-// Error severity levels
-export type ErrorSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-
 // HTTP status codes mapping
 export type HttpStatusCode =
   | 400 // Bad Request
@@ -29,7 +26,7 @@ export type HttpStatusCode =
   | 503; // Service Unavailable
 
 // Interface for error context metadata
-export interface ErrorContext {
+export interface ErrorDetails {
   userId?: string;
   requestId?: string;
   resourceId?: string;
@@ -43,9 +40,8 @@ export interface ErrorContext {
 export interface AppErrorParams {
   message: string | undefined;
   category: ErrorCategory | undefined;
-  severity?: ErrorSeverity | undefined;
   statusCode?: HttpStatusCode | undefined;
-  context?: ErrorContext | undefined;
+  details?: ErrorDetails | undefined;
   originalError?: Error | undefined;
   isOperational?: boolean | undefined;
   code?: string | undefined;
